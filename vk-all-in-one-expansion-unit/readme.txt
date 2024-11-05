@@ -5,7 +5,7 @@ Tags: Google Analytics, Related Posts, sitemap, Facebook Page Plugin, OG tags
 Requires at least: 6.2
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 9.100.0.1
+Stable tag: 9.100.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -80,6 +80,9 @@ e.g.
 2. This is an example of SNS cooperation setting screen.
 
 == Changelog ==
+
+= 9.100.1 =
+[ Bug Fix ][ Promotion Alert ] Fixed filtering in Promotion Alert by adding data-nosnippet attribute to the div tag. 
 
 = 9.100.0 =
 [ Add setting ][ Category list ] Enable to specify ascending/descending order
