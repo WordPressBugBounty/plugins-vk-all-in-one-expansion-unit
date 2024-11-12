@@ -81,7 +81,7 @@ class VEU_Promotion_Alert {
 				'id'          => array(),
 				'class'       => array(),
 				'style'       => array(),
-				'aria-hidden' => array()
+				'aria-hidden' => array(),
 			),
 			'a'      => array(
 				'id'    => array(),
@@ -101,18 +101,18 @@ class VEU_Promotion_Alert {
 				'style' => array(),
 				'href'  => array(),
 			),
-            'img'    => array(
-                'id'    => array(),
-                'class' => array(),
-                'style' => array(),
-                'src'   => array(),
-                'alt'   => array(),                
-            ),
+			'img'    => array(
+				'id'    => array(),
+				'class' => array(),
+				'style' => array(),
+				'src'   => array(),
+				'alt'   => array(),
+			),
 			'style'  => array(),
-            '!'    => array(),
+			'!'      => array(),
 		);
 	}
- 
+
 	/**
 	 * コンテンツにかけるフィルター
 	 */
@@ -130,32 +130,34 @@ class VEU_Promotion_Alert {
 
 	/**
 	 * Get Post Types
+	 * 
+	 * @return array $post_types
 	 */
 	public static function get_post_types() {
 
 		// 投稿タイプの事前準備
-		$post_types_default = array( 
+		$post_types_default = array(
 			array(
 				'label' => get_post_type_object( 'post' )->label,
-				'name'  => 'post'
+				'name'  => 'post',
 			),
 			array(
-				'label' =>  get_post_type_object( 'page' )->label,
+				'label' => get_post_type_object( 'page' )->label,
 				'name'  => 'page',
 			),
 		);
-		$post_types_extra = array();
+		$post_types_extra   = array();
 		$extra_post_types   = get_post_types(
 			array(
 				'public'   => true,
-				'_builtin' => false
+				'_builtin' => false,
 			),
 			'objects'
 		);
 		foreach ( $extra_post_types as $post_type ) {
 			$post_types_extra[] = array(
 				'label' => $post_type->label,
-				'name'  => $post_type->name
+				'name'  => $post_type->name,
 			);
 		}
 		$post_types = array_merge( $post_types_default, $post_types_extra );
@@ -164,21 +166,23 @@ class VEU_Promotion_Alert {
 
 	/**
 	 * Get Options
+	 * 
+	 * @return array $options
 	 */
 	public static function get_options() {
 
 		// デフォルト値
 		$default = array(
-			'alert-text'     => '',
-			'alert-content'  => '',
-			'alert-hook'     => '',
+			'alert-text'    => '',
+			'alert-content' => '',
+			'alert-hook'    => '',
 		);
 
 		// オプション取得
-		$options = get_option( 'vkExUnit_PA' );      
+		$options = get_option( 'vkExUnit_PA' );
 		$options = wp_parse_args( $options, $default );
 
-		// 投稿タイプ毎に初期化
+		// 投稿タイプ毎に初期化（ hide に指定 ）
 		$post_types = self::get_post_types();
 		foreach ( $post_types as $post_type ) {
 			if ( empty( $options['alert-display'][ $post_type['name'] ] ) ) {
@@ -192,6 +196,8 @@ class VEU_Promotion_Alert {
 
 	/**
 	 * Add Setting Page
+	 * 
+	 * @return void
 	 */
 	public static function option_init() {
 		vkExUnit_register_setting(
@@ -203,7 +209,9 @@ class VEU_Promotion_Alert {
 	}
 
 	/**
-	 * Sanitize Space 
+	 * Sanitize Space
+	 * 
+	 * @return string
 	 */
 	public static function sanitize_space( $input ) {
 		if ( preg_match( '/^(\s)+$/u', $input ) ) {
@@ -214,19 +222,23 @@ class VEU_Promotion_Alert {
 
 	/**
 	 * Sanitize Setting
+	 * 配列に格納されている入力された内容をサニタイズ
+	 * 
+	 * @param array $input : 入力された内容
+	 * @return array $options : サニタイズされた内容
 	 */
 	public static function sanitize_setting( $input ) {
 
-		 // 投稿タイプを取得
-	        $post_types = self::get_post_types();
+		// 投稿タイプを取得
+		$post_types = self::get_post_types();
 
-	        // 許可されたHTMLタグ
-        	$allowed_html = self::kses_allowed();
-		
+		// 許可されたHTMLタグ
+		$allowed_html = self::kses_allowed();
+
 		// サニタイズ処理
-		$options = array();
+		$options               = array();
 		$options['alert-text'] = ! empty( $input['alert-text'] ) ? self::sanitize_space( esc_html( $input['alert-text'] ) ) : '';
-		
+
 		// alert-contentを許可リストに基づいてサニタイズ
 		if ( ! empty( $input['alert-content'] ) ) {
 			$options['alert-content'] = wp_kses( stripslashes( $input['alert-content'] ), $allowed_html );
@@ -353,10 +365,8 @@ class VEU_Promotion_Alert {
 			if ( ! current_user_can( 'edit_page', $post_id ) ) {
 				return $post_id;
 			}
-		} else {
-			if ( ! current_user_can( 'edit_post', $post_id ) ) {
+		} elseif ( ! current_user_can( 'edit_post', $post_id ) ) {
 				return $post_id;
-			}
 		}
 
 		/* OK, it's safe for us to save the data now. */
@@ -370,20 +380,25 @@ class VEU_Promotion_Alert {
 
 	/**
 	 * Display Condition
+	 * アラートコンテンツを表示するかどうか
+	 * 
+	 * @param int $post_id : 投稿id
+	 * @return bool
 	 */
-	public static function get_display_condition( $post_id ) {
+	public static function is_display( $post_id ) {
 
 		// 通常は false
 		$return = false;
 
-		// カスタムフィールドを取得
+		// カスタムフィールドを取得（記事個別で非表示設定の情報があれば取得）
 		$meta = get_post_meta( $post_id, 'veu_display_promotion_alert', true );
+		// 投稿個別の設定がない場合は 共通設定 を指定
 		$meta = ! empty( $meta ) ? $meta : 'common';
 
 		// オプションを取得
 		$options = self::get_options();
 
-		  // 投稿タイプを取得
+		// 投稿タイプを取得
 		$post_type = get_post_type( $post_id );
 
 		// 表示条件を判定
@@ -391,33 +406,29 @@ class VEU_Promotion_Alert {
 			// カスタムフィールドが display の場合は true
 			$return = true;
 		} elseif ( 'common' === $meta && ! empty( $options['alert-display'][ $post_type ] ) && 'display' === $options['alert-display'][ $post_type ] ) {
-			// カスタムフィールドが common でオプションが display の場合は true
+			// カスタムフィールドが common && オプションが display の場合は true
 			$return = true;
 		}
 
-		return $return;        
+		return $return;
 	}
 
 	/**
 	 * Alert Content
+	 * 
+	 * @return string
 	 */
 	public static function get_alert_content() {
 		// アラートを初期化
-		$alert = '';
+		$alert         = '';
 		$alert_content = '';
-	
-		// 表示条件を判定
-		$display = self::get_display_condition( get_the_ID() );
-	
-		// 表示条件が true の場合はアラートを表示
-		if ( ! empty( $display ) ) {
-	
+
 			// オプションを取得
 			$options = self::get_options();
-	
+
 			// 許可されたHTMLタグ
 			$allowed_html = self::kses_allowed();
-	
+
 			// アラートの中身を作成
 			if ( ! empty( $options['alert-content'] ) ) {
 				$alert_content  = '<div class="veu_promotion-alert__content--custom">';
@@ -429,29 +440,33 @@ class VEU_Promotion_Alert {
 				$alert_content .= '<span class="veu_promotion-alert__text">' . esc_html( $options['alert-text'] ) . '</span>';
 				$alert_content .= '</div>';
 			}
-	
+
 			if ( ! empty( $alert_content ) ) {
 				// wp_ksesを通した後にdata-nosnippetを追加
 				$alert = wp_kses( '<div class="veu_promotion-alert">' . $alert_content . '</div>', $allowed_html );
-				$alert = str_replace('<div class="veu_promotion-alert">', '<div class="veu_promotion-alert" data-nosnippet>', $alert);
+				$alert = str_replace( '<div class="veu_promotion-alert">', '<div class="veu_promotion-alert" data-nosnippet>', $alert );
 			}
-		}
-	
+
+		// 投稿本文に含まれるHTML要素の属性を補完（ veu_promotion_alert_content フィルター ではタイミングの問題で動作しない ）
+		$alert = wp_filter_content_tags( $alert );
 		// 許可されたHTMLタグで再度サニタイズ
 		return apply_filters( 'veu_promotion_alert_content', $alert );
-	}	 
+	}
 
 	/**
 	 * Display Alert Content Filter Hook
+	 * 
+	 * @return string $content
 	 */
 	public static function display_alert_filter( $content ) {
 
-		// アラートを取得
-		$alert = self::get_alert_content();
+		if ( self::is_display( get_the_ID() ) ){
+			// アラートを取得
+			$alert = self::get_alert_content();
+			// 文頭にアラートを追加
+			$content = $alert . $content;
+		}
 
-		// 文頭にアラートを追加
-		$content = $alert . $content;
-	   
 		return $content;
 	}
 
@@ -460,12 +475,15 @@ class VEU_Promotion_Alert {
 	 */
 	public static function display_alert_action() {
 
-		// アラートを取得
-		$alert = self::get_alert_content();
-		// 許可されたHTMLタグ
-		$allowed_html = self::kses_allowed();
-
-		echo wp_kses( $alert, $allowed_html );       
+		if ( self::is_display( get_the_ID() ) ){
+			// アラートを取得
+			$alert = self::get_alert_content();
+			// 許可されたHTMLタグ
+			$allowed_html = self::kses_allowed();
+			echo wp_kses( $alert, $allowed_html );
+		} else {
+			return;
+		}
 	}
 
 	/**
@@ -479,7 +497,7 @@ class VEU_Promotion_Alert {
 			if ( ! empty( $options['alert-hook'] ) ) {
 				add_action( $options['alert-hook'], array( __CLASS__, 'display_alert_action' ) );
 			} else {
-				add_filter( 'the_content', array( __CLASS__, 'display_alert_filter' ) );           
+				add_filter( 'the_content', array( __CLASS__, 'display_alert_filter' ) );
 			}
 		}
 	}
@@ -503,7 +521,7 @@ class VEU_Promotion_Alert {
 			margin-top: 0;
 		}
 		';
-	
+
 		// delete before after space
 		$dynamic_css = trim( $dynamic_css );
 		// convert tab and br to space
