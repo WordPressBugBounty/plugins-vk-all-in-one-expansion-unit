@@ -4,10 +4,10 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit091e99dcb898294625a8545f960b6166
+class ComposerStaticInitcc48b6c5446dbf30f1ff93e33b88dd4d
 {
     public static $prefixLengthsPsr4 = array (
-        'V' => 
+        'V' =>
         array (
             'VektorInc\\VK_Term_Color\\' => 24,
             'VektorInc\\VK_Helpers\\' => 21,
@@ -19,27 +19,27 @@ class ComposerStaticInit091e99dcb898294625a8545f960b6166
     );
 
     public static $prefixDirsPsr4 = array (
-        'VektorInc\\VK_Term_Color\\' => 
+        'VektorInc\\VK_Term_Color\\' =>
         array (
             0 => __DIR__ . '/..' . '/vektor-inc/vk-term-color/src',
         ),
-        'VektorInc\\VK_Helpers\\' => 
+        'VektorInc\\VK_Helpers\\' =>
         array (
             0 => __DIR__ . '/..' . '/vektor-inc/vk-helpers/src',
         ),
-        'VektorInc\\VK_Font_Awesome_Versions\\' => 
+        'VektorInc\\VK_Font_Awesome_Versions\\' =>
         array (
             0 => __DIR__ . '/..' . '/vektor-inc/font-awesome-versions/src',
         ),
-        'VektorInc\\VK_CSS_Optimize\\' => 
+        'VektorInc\\VK_CSS_Optimize\\' =>
         array (
             0 => __DIR__ . '/..' . '/vektor-inc/vk-css-optimize/src',
         ),
-        'VektorInc\\VK_Breadcrumb\\' => 
+        'VektorInc\\VK_Breadcrumb\\' =>
         array (
             0 => __DIR__ . '/..' . '/vektor-inc/vk-breadcrumb/src',
         ),
-        'VektorInc\\VK_Admin\\' => 
+        'VektorInc\\VK_Admin\\' =>
         array (
             0 => __DIR__ . '/..' . '/vektor-inc/vk-admin/src',
         ),
@@ -60,9 +60,9 @@ class ComposerStaticInit091e99dcb898294625a8545f960b6166
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit091e99dcb898294625a8545f960b6166::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit091e99dcb898294625a8545f960b6166::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit091e99dcb898294625a8545f960b6166::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitcc48b6c5446dbf30f1ff93e33b88dd4d::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitcc48b6c5446dbf30f1ff93e33b88dd4d::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitcc48b6c5446dbf30f1ff93e33b88dd4d::$classMap;
 
         }, null, ClassLoader::class);
     }

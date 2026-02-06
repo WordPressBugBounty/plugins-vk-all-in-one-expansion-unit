@@ -15,7 +15,7 @@
 /*
 	Delete old function data
 */
-$options = get_option( 'veu_deprecated' );
+$options = get_option( 'veu_deprecated', array() );
 if ( empty( $options['9.72.0'] ) ) {
 	require VEU_DIRECTORY_PATH . '/delete-old-option-meta.php';
 	$options['9.72.0'] = 'done';
@@ -45,7 +45,7 @@ function veu_load_packages() {
 	require VEU_DIRECTORY_PATH . '/inc/footer-copyright-change.php';
 	veu_package_include(); // package_manager.php.
 }
-add_action( 'after_setup_theme', 'veu_load_packages' );
+add_action( 'after_setup_theme', 'veu_load_packages', 0 );
 
 /**
  * Add vkExUnit css

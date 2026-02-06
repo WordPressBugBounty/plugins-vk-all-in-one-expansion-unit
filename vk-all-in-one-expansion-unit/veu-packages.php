@@ -232,8 +232,8 @@ function veu_get_packages( $is_block_theme = null ) {
 	*/
 	$required_packages[] = array(
 		'name'        => 'addReusableBlockMenu',
-		'title'       => __( 'Add Reusable block menu', 'vk-all-in-one-expansion-unit' ) . $deprecated,
-		'description' => __( 'Add Manage all reusable blocks menu to admin menu.', 'vk-all-in-one-expansion-unit' ),
+		'title'       => __( 'Add Patterns menu', 'vk-all-in-one-expansion-unit' ) . $deprecated,
+		'description' => __( 'Add Patterns menu to admin menu.', 'vk-all-in-one-expansion-unit' ),
 		'default'     => false,
 		'include'     => 'add_menu_to_block_reuse.php',
 	);
@@ -351,12 +351,12 @@ function veu_get_packages( $is_block_theme = null ) {
 	);
 
 	/*
-		Promotion Alert
+		Promotion Disclosure
 	*/
 	$required_packages[] = array(
 		'name'        => 'promotion_alert',
-		'title'       => __( 'Promotion Alert', 'vk-all-in-one-expansion-unit' ),
-		'description' => __( 'If the article contains advertisements, it\'s essential to have a notation that general consumers can recognize.', 'vk-all-in-one-expansion-unit' ) . '<br>' . __( 'Using this feature, you can automatically insert the content set in ExUnit > Main Settings into the post.', 'vk-all-in-one-expansion-unit' ),
+		'title'       => __( 'Promotion Disclosure', 'vk-all-in-one-expansion-unit' ),
+		'description' => __( 'If the article contains advertisements, it\'s essential to have a disclosure that general consumers can recognize.', 'vk-all-in-one-expansion-unit' ) . '<br>' . __( 'Using this feature, you can automatically insert the content set in ExUnit > Main Settings into the post.', 'vk-all-in-one-expansion-unit' ),
 		'attr'        => array(
 			array(
 				'name'        => __( 'Setting', 'vk-all-in-one-expansion-unit' ),
@@ -424,17 +424,6 @@ function veu_get_packages( $is_block_theme = null ) {
 				'enable_only' => true,
 			),
 		),
-	);
-
-	/**
-	 * IE Alart.
-	 */
-	$required_packages[] = array(
-		'name'        => 'display_ie_alert',
-		'title'       => __( 'Display IE Alert', 'vk-all-in-one-expansion-unit' ) . $deprecated,
-		'description' => __( 'Display a warning if the user who is viewing this site is using IE.', 'vk-all-in-one-expansion-unit' ) . '<br>' . __( 'IE is a very old browser and its creator Microsoft does not recommend its use. Encouraging IE users to switch to the next-generation browser will greatly contribute to the evolution of the website.', 'vk-all-in-one-expansion-unit' ),
-		'default'     => true,
-		'include'     => 'display-ie-alert.php',
 	);
 
 	/*

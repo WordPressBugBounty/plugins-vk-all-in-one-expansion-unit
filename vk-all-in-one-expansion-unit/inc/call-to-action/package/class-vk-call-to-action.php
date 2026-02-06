@@ -195,19 +195,21 @@ if ( ! class_exists( 'Vk_Call_To_Action' ) ) {
 
 				// カスタムフィールドの保存.
 				foreach ( $custom_fields as $custom_field_name => $custom_field_options ) {
+					$data = '';
 					if ( isset( $_POST[ $custom_field_name ] ) ) {
-						if ( ! empty( $custom_field_name['escape_type'] ) ) {
-							if ( is_array( $custom_field_name['escape_type'] ) ) {
+						if ( ! empty( $custom_field_options['escape_type'] ) ) {
+							if ( is_array( $custom_field_options['escape_type'] ) ) {
 								// エスケープ処理が複数ある場合
 								$data = $_POST[ $custom_field_name ];
-								foreach ( $custom_field_name['escape_type'] as $escape ) {
+								foreach ( $custom_field_options['escape_type'] as $escape ) {
 									$data = call_user_func( $escape, $data );
 								}
 							} else {
 								// エスケープ処理が一つの場合
-								$data = call_user_func( $custom_field_name['escape_type'], $_POST[ $custom_field_name ] );
+								$data = call_user_func( $custom_field_options['escape_type'], $_POST[ $custom_field_name ] );
 							}
 						} else {
+							// エスケープ処理が無い場合
 							$data = $_POST[ $custom_field_name ];
 						}
 					}
@@ -363,7 +365,7 @@ if ( ! class_exists( 'Vk_Call_To_Action' ) ) {
 	<tr><th>
 	<label for="vkExUnit_cta_button_icon"><?php _e( 'Button icon', 'vk-all-in-one-expansion-unit' ); ?></label></th>
 	<td>
-	<p><?php _e( 'To choose your favorite icon, and enter the class.', 'vk-all-in-one-expansion-unit' ); ?></p>
+	<p><?php _e( 'To choose your favorite icon, and enter the icon html.', 'vk-all-in-one-expansion-unit' ); ?></p>
 	<div class="vkExUnit_cta_button_icon_inputset">
 		<dl>
 		<dt><label for="icon_before"><?php _e( 'Before :', 'vk-all-in-one-expansion-unit' ); ?></label></dt>
@@ -451,6 +453,7 @@ if ( ! class_exists( 'Vk_Call_To_Action' ) ) {
 				}
 			}
 
+			// 表示するCTAのIDが指定されていない場合は空を返す.
 			if ( ! $id ) {
 				return '';
 			}
@@ -502,9 +505,15 @@ if ( ! class_exists( 'Vk_Call_To_Action' ) ) {
 			return $return;
 		}
 
+		/**
+		 * 表示するCTAのIDを取得
+		 *
+		 * @param int $id 表示先のページの投稿のID
+		 * @return int|null 表示するCTAのID。CTAを表示しない場合は null を返す。
+		 */
 		public static function is_cta_id( $id = null ) {
 
-			// 表示する投稿のIDを取得
+			// CTAを表示する先の投稿のIDを取得
 			if ( ! $id ) {
 				$id = get_the_id(); }
 			// ?
@@ -513,6 +522,19 @@ if ( ! class_exists( 'Vk_Call_To_Action' ) ) {
 
 			// 各投稿編集画面で プルダウンで指定されている 表示するCTAの投稿ID（もしくは共通設定や非表示）
 			$post_config = get_post_meta( $id, 'vkexunit_cta_each_option', true );
+
+			// アーカイブなどの複数投稿表示時はメイン設定で非表示指定されている場合はCTAを無効化.
+			// 個別ページじゃない場合
+			if ( ! is_singular() ) {
+				// 投稿タイプを取得
+				$post_type = get_post_type( $id );
+				if ( $post_type ) {
+					$option = self::get_option();
+					if ( isset( $option[ $post_type ] ) && in_array( $option[ $post_type ], array( '0', 0 ), true ) ) {
+						return null;
+					}
+				}
+			}
 
 			// 「共通設定を使用」じゃなかった場合
 			if ( $post_config ) {
