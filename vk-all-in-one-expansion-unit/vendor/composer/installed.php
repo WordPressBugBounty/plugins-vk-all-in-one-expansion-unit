@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'vektor-inc/vk-all-in-one-expansion-unit',
-        'pretty_version' => '9.113.3.1',
-        'version' => '9.113.3.1',
-        'reference' => 'd2925dee7237e5f05349a62c7dc129b5e920916e',
+        'pretty_version' => '9.113.4.1',
+        'version' => '9.113.4.1',
+        'reference' => '0384ae0c757046aa15604f4d720af31d0d7198e9',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -29,9 +29,9 @@
             'dev_requirement' => false,
         ),
         'vektor-inc/vk-all-in-one-expansion-unit' => array(
-            'pretty_version' => '9.113.3.1',
-            'version' => '9.113.3.1',
-            'reference' => 'd2925dee7237e5f05349a62c7dc129b5e920916e',
+            'pretty_version' => '9.113.4.1',
+            'version' => '9.113.4.1',
+            'reference' => '0384ae0c757046aa15604f4d720af31d0d7198e9',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
