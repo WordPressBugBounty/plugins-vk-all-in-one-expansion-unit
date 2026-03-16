@@ -5,7 +5,7 @@ Tags: Google Analytics, Related Posts, sitemap, Facebook Page Plugin, OG tags
 Requires at least: 6.5
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 9.113.4.1
+Stable tag: 9.113.5.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -80,6 +80,10 @@ e.g.
 2. This is an example of SNS cooperation setting screen.
 
 == Changelog ==
+
+= 9.113.5 =
+[ Bug Fix ] Fix array-type custom fields (e.g. veu_head_title) not being saved due to the SNS title XSS fix.
+[ Design Bug Fix ][ Share Button / Related Posts / Contact Section ] Fix margin-top being overwritten by core margin-block-start.
 
 = 9.113.4 =
 [ Security Fix ][ SNS Share Button ] Fix stored XSS vulnerability in SNS Title meta box field (vkExUnit_sns_title). Added esc_attr() escaping on output to data-clipboard-text attribute and sanitize_text_field() on save to prevent attribute-breakout injection.
