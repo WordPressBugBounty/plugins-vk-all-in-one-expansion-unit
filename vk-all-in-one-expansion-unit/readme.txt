@@ -5,7 +5,7 @@ Tags: Google Analytics, Related Posts, sitemap, Facebook Page Plugin, OG tags
 Requires at least: 6.5
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 9.115.1
+Stable tag: 9.116.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -80,6 +80,19 @@ e.g.
 2. This is an example of SNS cooperation setting screen.
 
 == Changelog ==
+
+= 9.116.0 =
+[ Security Fix ][ Page Top Button ] Hardened the page top button image URL sanitizer (`veu_pagetop_sanitize_image_url()`) to close additional CSS injection vectors that bypassed the initial sanitizer added in the previous release. The control-character check now uses the PCRE `u` modifier and an explicit `[\x{0080}-\x{009F}]` range so multi-byte C1 control characters are rejected, and a new case-insensitive check rejects URL-encoded representations of the dangerous characters (`%22` / `%27` / `%28` / `%29` / `%5C`) which browsers may decode inside `url("...")`.
+
+[ Spec Change ][ Page Top Button ] Unified the `hide_mobile` sanitizer in the ExUnit main setting page (`veu_pagetop_sanitize()`) to use the shared `veu_sanitize_boolean()` callback, matching the Customizer setting's `sanitize_callback` so the stored value is consistently a boolean across both entry points. Also added a defensive `is_array()` guard to `veu_pagetop_render()` so that non-array arguments fall back to the default options array instead of triggering warnings.
+
+[ Bug Fix ] Fixed stylelint `font-family-name-quotes` violations. The SCSS source for the Font Awesome 5 family now uses the standard `"Font Awesome 5 Free"` quoted form instead of the escaped `Font Awesome\ 5 Free` notation, and the gulp-clean-css invocation in gulpfile.js is configured with `level: { 1: { removeQuotes: false } }` so that the minifier preserves the surrounding quotes for font-family names that require them (e.g. `"vk_sns"`).
+
+[ Feature ][ Page Top Button ] Added an "image" setting so users can upload their own icon for the page top button from the ExUnit main setting page and the Customizer. The selected image URL is applied via an inline `style` attribute that overrides the `--veu_page_top_button_url` CSS custom property, so themes / custom CSS that already override the legacy `--ver_page_top_button_url` continue to work unchanged. The URL is sanitized with a dedicated sanitizer that rejects values containing quotes, parentheses, whitespace or control characters, and only allows image extensions (svg / png / jpg / jpeg / gif / webp) to mitigate CSS injection.
+
+[ Spec Change ][ Page Top Button ] Renamed the `--ver_page_top_button_url` CSS custom property to `--veu_page_top_button_url` to align with the `--veu_` (vk Ex Unit) naming convention. For backward compatibility, the SCSS `background-image` keeps a `var( --ver_..., var( --veu_... ) )` fallback so existing themes / custom CSS overriding `--ver_page_top_button_url` continue to work without any change.
+
+[ Bug Fix ] Fixed an issue where JS files under `vendor/` (such as `vk_admin.js` and the Font Awesome version `*.min.js` files) were not included in the release zip, causing 404 errors in the WordPress admin screen on sites installed from the dist package. The gulp `dist` task's `src` glob list was missing both `./vendor/**` and any JS glob, so only PHP / CSS assets under `vendor/` were copied to `dist/`. Added `./vendor/**` to the glob list so the JS files shipped by composer-managed Vektor packages are included in the release zip. Also added negative globs (`!./vendor/**/tests/**`, `!./vendor/**/phpunit.xml*`, `!./vendor/**/composer.json`, `!./vendor/**/composer.lock`, `!./vendor/**/package.json`, `!./vendor/**/package-lock.json`, `!./vendor/**/gulpfile.js`, `!./vendor/**/README.md`, `!./vendor/**/.*`) so that upstream packages' test code and development-only configuration files are not bundled into the release zip.
 
 = 9.115.1 =
 [ Security Fix ][ SNS Share Button ] Strengthened URL validation in the Hatena Bookmark and Facebook share count REST API callbacks. The previous substring-based check could be bypassed by attacker-controlled hosts that embed the site's host name (e.g. example.com.attacker.com), allowing share counts to be fetched for external URLs. The host name is now extracted with wp_parse_url() and compared with the site's host name using a case-insensitive exact match. Subdomains are not allowed.
