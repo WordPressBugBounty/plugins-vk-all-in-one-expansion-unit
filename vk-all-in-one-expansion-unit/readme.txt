@@ -5,7 +5,7 @@ Tags: Google Analytics, Related Posts, sitemap, Facebook Page Plugin, OG tags
 Requires at least: 6.5
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 9.117.1
+Stable tag: 9.117.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -80,6 +80,13 @@ e.g.
 2. This is an example of SNS cooperation setting screen.
 
 == Changelog ==
+
+= 9.117.2 =
+[ Bug Fix ] Fixed a warning in the article structured data output when the author user could not be retrieved.
+
+[ Bug Fix ] Fixed an "Array to string conversion" PHP warning and an invalid "post-type-Array" body class that occurred on archives whose main query sets post_type to an array and that have no matching posts.
+
+[ Bug Fix ] Fixed an issue where the Related Posts Settings section disappeared from the Customizer when both the Contact Section and Social Media Integration features were disabled.
 
 = 9.117.1 =
 [ Bug Fix ] Removed an unnecessary veu_get_common_options() call in vwu_register_css() that could trigger a "Call to undefined function" fatal error when the enqueue hooks ran before the packages were loaded in some environments.
@@ -1099,7 +1106,7 @@ vk blocks 0.17.2 update
 * [ bugfix ] Use with VK Post Author Display bug fix
 
 = 9.6.8.0 =
-* [ Specification change ] ファイル階層一部変更
+* [ Specification change ] Change file structure
 
 = 9.6.7.0 =
 * [ library update ] library update
