@@ -5,7 +5,7 @@ Tags: Google Analytics, Related Posts, sitemap, Facebook Page Plugin, OG tags
 Requires at least: 6.5
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 9.117.2
+Stable tag: 9.117.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -80,6 +80,19 @@ e.g.
 2. This is an example of SNS cooperation setting screen.
 
 == Changelog ==
+
+= 9.117.3 =
+[ Bug Fix ][ Setting Page ] Updated the shared admin component so that the setting screen styles and scripts are reloaded reliably after an update instead of being served from the cache, and so that the left side navigation is no longer cut off while a notice is displayed.
+
+[ Spec Change ][ Page Top Button ] Improved screen reader and keyboard accessibility with an accessible label, a keyboard focus indicator, and removal from keyboard focus while the button is hidden.
+
+[ Spec Change ][ Page Top Button ] The focus indicator now follows the silhouette of an uploaded image, and the show / hide animation respects the reduced motion preference.
+
+[ Bug Fix ][ Article Structured Data ] Stopped outputting an empty "image" value in the JSON-LD when a post has no featured image, omitting the image field entirely instead.
+
+[ Spec Change ][ Article Structured Data ] Changed the JSON-LD "image" to the ImageObject format (url/width/height) and switched the source to the original full-resolution image.
+
+[ Bug Fix ][ Widget ] Fixed PHP 8.x undefined array key and undefined variable warnings that were written to the error log when saving widgets with unchecked checkboxes (Contact Section, Page, FB Page Plugin) or an invalid colour selection (Button, Twitter).
 
 = 9.117.2 =
 [ Bug Fix ] Fixed a warning in the article structured data output when the author user could not be retrieved.
