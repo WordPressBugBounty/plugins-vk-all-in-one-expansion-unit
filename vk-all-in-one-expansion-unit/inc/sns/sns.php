@@ -82,6 +82,7 @@ function veu_get_sns_options_default() {
 		'useFacebook'                 => true,
 		'useTwitter'                  => true,
 		'useBluesky'                  => true,
+		'useThreads'                  => true,
 		'useHatena'                   => true,
 		'useLine'                     => true,
 		'useCopy'                     => true,
@@ -244,6 +245,7 @@ function vkExUnit_sns_options_validate( $input ) {
 	$output['useFacebook']                 = ( isset( $input['useFacebook'] ) && $input['useFacebook'] == 'true' );
 	$output['useTwitter']                  = ( isset( $input['useTwitter'] ) && $input['useTwitter'] == 'true' );
 	$output['useBluesky']                  = ( isset( $input['useBluesky'] ) && $input['useBluesky'] == 'true' );
+	$output['useThreads']                  = ( isset( $input['useThreads'] ) && $input['useThreads'] == 'true' );
 	$output['useHatena']                   = ( isset( $input['useHatena'] ) && $input['useHatena'] == 'true' );
 	$output['useCopy']                     = ( isset( $input['useCopy'] ) && $input['useCopy'] == 'true' );
 	$output['useLine']                     = ( isset( $input['useLine'] ) && $input['useLine'] == 'true' );
@@ -278,37 +280,46 @@ function veu_set_facebook_script() {
 	add_action( 'wp_footer', 'exUnit_print_fbId_script', 100 );
 }
 
+/**
+ * Prints the Facebook root element and JavaScript SDK loader.
+ *
+ * @return void
+ */
 function exUnit_print_fbId_script() {
 	?>
 <div id="fb-root"></div>
 	<?php
-	$options = veu_get_sns_options();
-	$fbAppId = ( isset( $options['fbAppId'] ) ) ? $options['fbAppId'] : '';
+	$options        = veu_get_sns_options();
+	$fbAppId        = ( isset( $options['fbAppId'] ) ) ? sanitize_text_field( $options['fbAppId'] ) : '';
+	$facebookLocale = preg_replace( '/[^a-zA-Z_]/', '', _x( 'en_US', 'facebook language code', 'vk-all-in-one-expansion-unit' ) );
+	$facebookLocale = ( $facebookLocale ) ? $facebookLocale : 'en_US';
+	$fbSdkVersion   = sanitize_text_field( apply_filters( 'vkExUnit_facebook_sdk_version', 'v25.0' ) );
+	$fbSdkVersion   = ( $fbSdkVersion ) ? $fbSdkVersion : 'v25.0';
+	// build_query() は値をURLエンコードしないため、& や # を含む値でクエリ文字列が壊れないよう
+	// 各値を rawurlencode() してから渡す（キーは固定の安全な文字列なのでそのまま）。
+	// build_query() does not URL-encode values, so rawurlencode() each value beforehand to keep the
+	// query string intact even if a value contains & or # (keys are fixed safe strings, left as is).
+	$fbSdkParams = array(
+		'xfbml'   => '1',
+		'version' => rawurlencode( $fbSdkVersion ),
+	);
+	if ( $fbAppId ) {
+		$fbSdkParams['appId'] = rawurlencode( $fbAppId );
+	}
+	$fbSdkUrl = 'https://connect.facebook.net/' . $facebookLocale . '/sdk.js#' . build_query( $fbSdkParams );
 	?>
 <script>
-;(function(w,d){
-	var load_contents=function(){
-		(function(d, s, id) {
-		var js, fjs = d.getElementsByTagName(s)[0];
-		if (d.getElementById(id)) return;
-		js = d.createElement(s); js.id = id;
-		js.src = "//connect.facebook.net/<?php echo esc_attr( _x( 'en_US', 'facebook language code', 'vk-all-in-one-expansion-unit' ) ); ?>/sdk.js#xfbml=1&version=v2.9&appId=<?php echo esc_html( $fbAppId ); ?>";
-		fjs.parentNode.insertBefore(js, fjs);
-		}(d, 'script', 'facebook-jssdk'));
-	};
-	var f=function(){
-		load_contents();
-		w.removeEventListener('scroll',f,true);
-	};
-	var widget = d.getElementsByClassName("fb-page")[0];
-	var view_bottom = d.documentElement.scrollTop + d.documentElement.clientHeight;
-	var widget_top = widget.getBoundingClientRect().top + w.scrollY;
-	if ( widget_top < view_bottom) {
-		load_contents();
-	} else {
-		w.addEventListener('scroll',f,true);
-	}
-})(window,document);
+;(function(d, s, id) {
+	var js, fjs = d.getElementsByTagName(s)[0];
+	if (d.getElementById(id)) return;
+	js = d.createElement(s);
+	js.id = id;
+	js.async = true;
+	js.defer = true;
+	js.crossOrigin = "anonymous";
+	js.src = <?php echo wp_json_encode( $fbSdkUrl ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
+	fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
 </script>
 	<?php
 }
