@@ -361,7 +361,9 @@ class VEU_Promotion_Alert {
 		}
 
 		// Check the user's permissions.
-		if ( 'page' == $_POST['post_type'] ) {
+		// post_type が送信されないフローでの Undefined array key 警告を防ぐ。
+		// Guard against an "Undefined array key" warning in flows where post_type is not submitted.
+		if ( isset( $_POST['post_type'] ) && 'page' === sanitize_key( wp_unslash( $_POST['post_type'] ) ) ) {
 			if ( ! current_user_can( 'edit_page', $post_id ) ) {
 				return $post_id;
 			}
@@ -435,8 +437,10 @@ class VEU_Promotion_Alert {
 			$alert_content .= wp_kses( $options['alert-content'], $allowed_html );
 			$alert_content .= '</div>';
 		} elseif ( ! empty( $options['alert-text'] ) ) {
-			$alert_content  = '<div class="veu_promotion-alert__content--text">';
-			$alert_content .= '<span class="veu_promotion-alert__icon"><i class="fa-solid fa-circle-info"></i></span>';
+			$alert_content = '<div class="veu_promotion-alert__content--text">';
+			// 隣に注意文のテキストがあるためアイコンは装飾。読み上げから除外する（kses 許可リストに aria-hidden 登録済み）。
+			// The alert text sits next to it, so the icon is decorative and hidden from screen readers ( aria-hidden is in the kses allowlist ).
+			$alert_content .= '<span class="veu_promotion-alert__icon"><i class="fa-solid fa-circle-info" aria-hidden="true"></i></span>';
 			$alert_content .= '<span class="veu_promotion-alert__text">' . esc_html( $options['alert-text'] ) . '</span>';
 			$alert_content .= '</div>';
 		}

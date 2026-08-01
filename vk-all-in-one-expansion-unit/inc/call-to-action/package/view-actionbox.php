@@ -25,8 +25,10 @@ if ( $btn_before ) {
 		$icon_class = $raw;
 	}
 
+	// ボタンラベルの前に置く装飾アイコン。同じボタン内にラベルテキストがあるため読み上げから除外する。
+	// Decorative icon before the button label. The label text is in the same button, so hide it from screen readers.
 	$btn_before = $icon_class
-		? '<i class="' . $fa . esc_attr( $icon_class ) . ' font_icon"></i> '
+		? '<i class="' . $fa . esc_attr( $icon_class ) . ' font_icon" aria-hidden="true"></i> '
 		: '';
 }
 $btn_after = get_post_meta( $id, 'vkExUnit_cta_button_icon_after', true );
@@ -41,8 +43,10 @@ if ( $btn_after ) {
 		$icon_class = $raw;
 	}
 
+	// ボタンラベルの後に置く装飾アイコン。同じボタン内にラベルテキストがあるため読み上げから除外する。
+	// Decorative icon after the button label. The label text is in the same button, so hide it from screen readers.
 	$btn_after = $icon_class
-		? '<i class="' . $fa . esc_attr( $icon_class ) . ' font_icon"></i> '
+		? '<i class="' . $fa . esc_attr( $icon_class ) . ' font_icon" aria-hidden="true"></i> '
 		: '';
 }
 $url   = get_post_meta( $id, 'vkExUnit_cta_url', true );
@@ -53,11 +57,15 @@ $imgid = get_post_meta( $id, 'vkExUnit_cta_img', true );
 
 $image_position = get_post_meta( $id, 'vkExUnit_cta_img_position', true );
 if ( ! $image_position ) {
-	$image_position = 'right'; }
+	$image_position = Vk_Call_To_Action::IMAGE_POSITION_DEFAULT; }
 
 $content  = '';
-$content .= '<section class="veu_cta" id="veu_cta-' . $id . '">';
-$content .= '<h1 class="cta_title">' . $cta_post->post_title . '</h1>';
+$content .= '<section class="veu_cta" id="veu_cta-' . esc_attr( $id ) . '">';
+// タイトルはこれまでフィルタされておらず、改行調整などに <br> を入れている運用があるため esc_html() は使えない.
+// wp_kses_post() なら <script> や on* 属性は除去され、同テンプレート内の本文・ボタンラベルとも処理が揃う.
+// The title has never been filtered and is sometimes given a <br> for line breaks, so esc_html() cannot be used.
+// wp_kses_post() strips <script> and on* attributes and matches how the body and button label are handled in this template.
+$content .= '<h2 class="cta_title">' . wp_kses_post( $cta_post->post_title ) . '</h2>';
 $content .= '<div class="cta_body">';
 
 
@@ -69,8 +77,10 @@ if ( 'window_self' !== $target_blank ) {
 	$target = '';
 }
 if ( $imgid ) {
-	$content .= '<div class="cta_body_image cta_body_image_' . $image_position . '">';
-	$content .= ( $url ) ? '<a href="' . $url . '"' . $target . '>' : '';
+	// $image_position はカスタムフィールドの値をそのまま class 属性へ連結するため必ずエスケープする。
+	// Always escape $image_position because the custom field value is concatenated into a class attribute.
+	$content .= '<div class="cta_body_image cta_body_image_' . esc_attr( $image_position ) . '">';
+	$content .= ( $url ) ? '<a href="' . esc_url( $url ) . '"' . $target . '>' : '';
 	$content .= wp_get_attachment_image( $imgid, 'large' );
 	$content .= ( $url ) ? '</a>' : '';
 	$content .= '</div>';
@@ -80,7 +90,7 @@ $content .= wp_kses_post( do_shortcode( $text ) );
 $content .= '</div>';
 if ( $url && $btn_text ) {
 	$content .= '<div class="cta_body_link">';
-	$content .= '<a href="' . $url . '" class="btn btn-primary btn-block btn-lg"' . $target . '>';
+	$content .= '<a href="' . esc_url( $url ) . '" class="btn btn-primary btn-block btn-lg"' . $target . '>';
 	$content .= wp_kses_post( $btn_before . $btn_text . $btn_after );
 	$content .= '</a>';
 	$content .= '</div>';

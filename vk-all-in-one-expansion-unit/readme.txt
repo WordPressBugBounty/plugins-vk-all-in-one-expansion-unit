@@ -1,11 +1,11 @@
 === VK All in One Expansion Unit ===
-Contributors: vektor-inc,kurudrive,jim912,hideokamoto,nc30,SaoriMiyazaki,catherine8007,naoki0h,rickaddison7634,una9,kaorock72,kurishimak,chiakikouno,daikiweb23,doshimaf,shimotomoki,mtdkei,mt8biz
+Contributors: vektor-inc,kurudrive,jim912,hideokamoto,nc30,SaoriMiyazaki,catherine8007,naoki0h,rickaddison7634,una9,kaorock72,kurishimak,chiakikouno,daikiweb23,doshimaf,shimotomoki,mtdkei,mt8biz,thisismyurl
 Donate link:
 Tags: Google Analytics, Related Posts, sitemap, Facebook Page Plugin, OG tags
 Requires at least: 6.5
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 9.118.0
+Stable tag: 9.119.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -80,6 +80,23 @@ e.g.
 2. This is an example of SNS cooperation setting screen.
 
 == Changelog ==
+
+= 9.119.0 =
+[ Spec Change ] Update vektor-inc/font-awesome-versions from 0.7.4 to 0.7.5
+[ Spec Change ] Changed the heading tag of the Related Posts, 3PR Area and PR Blocks widgets, and the Call To Action block / shortcode, from `<h1>` to `<h2>` to avoid multiple `<h1>` elements on a page ( the CSS class names are unchanged, so class-based styling is unaffected ).
+[ Spec Change ] Hid decorative icons from screen readers so they are no longer read aloud together with the visible label.
+[ Spec Change ] Added accessible names to the Profile widget's icon-only social media links.
+[ Bug Fix ][ Widget ] Fixed a PHP warning that occurred on the admin widget form of the Recent Posts widget when its title was empty.
+[ Bug Fix ] Fixed PHP warnings, notices and deprecations ( and a potential fatal error ) logged in debug mode on recent PHP versions, while keeping PHP 7.4 support.
+[ Bug Fix ][ CTA ] Fixed the CTA image not being saved and the button text / message losing their allowed HTML when saved from the classic edit screen.
+[ Bug Fix ][ Custom Post Type Manager ] Fixed custom post types saved by older versions losing "title" support when re-registered.
+[ Bug Fix ][ Custom Post Type Manager ] Fixed a fatal TypeError on PHP 8 when re-registering a custom post type whose legacy support data was not stored as an array.
+[ Bug Fix ][ Custom CSS ] Fixed the per-post Custom CSS leaking into the whole admin screen and breaking admin elements such as headings; it is now applied only to the block editor content and the front end.
+[ Bug Fix ][ Smooth Scroll ] Fixed the "CSS only" option label showing outdated information that it does not work on Safari; modern Safari versions support it.
+[ Bug Fix ][ Custom CSS ] Fixed the success and error notices shown after saving the CSS customizer always appearing in English because they referenced an old text domain.
+[ Security Fix ][ CTA ] Added allowlist validation on save and escaping on output for the CTA image position custom field, which allowed stored XSS.
+[ Security Fix ][ CTA ] Fixed the CTA title being output without any filtering. Decorative HTML such as line breaks and inline tags keeps working, while script tags and event attributes are now removed.
+[ Security Fix ][ CTA ] Fixed the link URLs output by the CTA display not being escaped.
 
 = 9.118.0 =
 [ New Feature ][ SNS Share Button ] Added a Threads share button, with a show / hide toggle under ExUnit > Main Setting.
