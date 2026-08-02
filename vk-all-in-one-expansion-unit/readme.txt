@@ -5,7 +5,7 @@ Tags: Google Analytics, Related Posts, sitemap, Facebook Page Plugin, OG tags
 Requires at least: 6.5
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 9.119.0
+Stable tag: 9.120.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -80,6 +80,11 @@ e.g.
 2. This is an example of SNS cooperation setting screen.
 
 == Changelog ==
+
+= 9.120.0 =
+[ New Feature ] Added an alternative text setting for the inquiry banner image. When it is left blank, the alternative text set on the media library is filled in automatically on save.
+[ Spec Change ] Fixed the inquiry banner image being read aloud as "contact_txt" by screen readers; it now uses the alternative text you set, or the contact button text as the link name when it is blank.
+[ Design Bug Fix ][ Widget / CTA ] Fixed the Related Posts, 3PR Area, PR Blocks and Call To Action titles getting unintended backgrounds, borders and spacing on themes such as Lightning and X-T9. The `<h1>` to `<h2>` change made in 9.119.0 has been reverted, so a page can again contain more than one `<h1>`.
 
 = 9.119.0 =
 [ Spec Change ] Update vektor-inc/font-awesome-versions from 0.7.4 to 0.7.5
