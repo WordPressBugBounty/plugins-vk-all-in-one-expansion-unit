@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'vektor-inc/vk-all-in-one-expansion-unit',
-        'pretty_version' => '9.122.1',
-        'version' => '9.122.1.0',
-        'reference' => '5bf088f8824672cf66ce66569469b2f3e1eefcf7',
+        'pretty_version' => '9.123.0',
+        'version' => '9.123.0.0',
+        'reference' => '079d04f977c0869a625c859f4fe56ec0d6d1d0d5',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         'vektor-inc/font-awesome-versions' => array(
-            'pretty_version' => '0.7.5',
-            'version' => '0.7.5.0',
-            'reference' => '0f13392629e0af4b6595c5dca59c65d9e854780c',
+            'pretty_version' => '0.7.6',
+            'version' => '0.7.6.0',
+            'reference' => '3c48955fe9d1d76756e729224341164d085a7e09',
             'type' => 'library',
             'install_path' => __DIR__ . '/../vektor-inc/font-awesome-versions',
             'aliases' => array(),
@@ -29,9 +29,9 @@
             'dev_requirement' => false,
         ),
         'vektor-inc/vk-all-in-one-expansion-unit' => array(
-            'pretty_version' => '9.122.1',
-            'version' => '9.122.1.0',
-            'reference' => '5bf088f8824672cf66ce66569469b2f3e1eefcf7',
+            'pretty_version' => '9.123.0',
+            'version' => '9.123.0.0',
+            'reference' => '079d04f977c0869a625c859f4fe56ec0d6d1d0d5',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
