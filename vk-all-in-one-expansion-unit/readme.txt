@@ -5,7 +5,7 @@ Tags: Google Analytics, Related Posts, sitemap, Facebook Page Plugin, OG tags
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 9.123.0
+Stable tag: 9.123.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -89,6 +89,9 @@ This plugin's share button icons (Facebook, X, Bluesky, Threads, Hatena Bookmark
 Full license texts are included in LICENSE-THIRD-PARTY.txt, bundled with this plugin.
 
 == Changelog ==
+
+= 9.123.1 =
+[ Other ] Changed the child page list widget to pass array arguments to `wp_list_pages()` for compatibility with future WordPress versions.
 
 = 9.123.0 =
 [ New Feature ] Added a "Shared Template-Tag Files (ExUnit)" section to Site Health > Info and a `wp exunit template-tags status` WP-CLI command, showing which plugin's bundled copy of ExUnit's shared template-tag files is currently in effect.
